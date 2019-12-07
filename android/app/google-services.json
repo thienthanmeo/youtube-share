@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "413757939465",
+    "firebase_url": "https://share-e65ca.firebaseio.com",
+    "project_id": "share-e65ca",
+    "storage_bucket": "share-e65ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413757939465:android:1d9b0a264dfe3f84c87dd8",
+        "android_client_info": {
+          "package_name": "com.youtubeshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413757939465-070dncobv41ch67kruihoti34es58v81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXjwy_FZU6Mq8KGUOaqJ7kCqUmPv7hF-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413757939465-070dncobv41ch67kruihoti34es58v81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
