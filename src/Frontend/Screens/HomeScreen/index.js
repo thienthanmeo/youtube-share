@@ -11,20 +11,19 @@ import PropTypes from 'prop-types'
 class HomeScreen extends Component {
   constructor (props) {
     super(props)
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    !ISIOS && BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
   }
   componentDidMount () {
     const { fetchClients } = this.props
-
+    fetchClients()
     if (ISIOS) {
       SplashScreen.hide()
     } else {
       setTimeout(() => SplashScreen.hide(), 100)
     }
-    fetchClients()
   }
   componentWillUnmount () {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    !ISIOS && BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
   }
   getActiveScreen = (navigationState) => {
     if (navigationState.index !== undefined) {
@@ -51,7 +50,7 @@ class HomeScreen extends Component {
     return (
       <HomeView
         navigation={this.props.navigation}
-        clientState={clientState}
+        clientState={clientState || {}}
         gotoDetail={gotoDetail}
       />
     )

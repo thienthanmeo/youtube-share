@@ -22,7 +22,7 @@ class LoginScreen extends Component {
       email: '',
       password: ''
     }
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    !ISIOS && BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
   }
   componentDidMount () {
     if (ISIOS) {
@@ -32,7 +32,7 @@ class LoginScreen extends Component {
     }
   }
   componentWillUnmount () {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    !ISIOS && BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
   }
   getActiveScreen = navigationState => {
     if (navigationState.index !== undefined) {

@@ -1,26 +1,9 @@
 
-import ServerAPI, { signUp, signIn, onAuthStateChanged, signOut } from 'backend/api'
+import ServerAPI, { signUp, signIn, signOut } from 'backend/api'
 import { Observable } from 'rxjs'
 import { actionsType, strMessageTimeout, TIME_OUT, ttError, RouteKey } from 'utils/globalConstants'
 
 export default (action$, store, dependencies) => {
-  const checkAuthen$ = action$.ofType(actionsType.CHECK_AUTHEN).switchMap((action) => {
-    return Observable.fromPromise(onAuthStateChanged())
-      .mergeMap((response) => {
-        if (response) {
-          console.log('login response: ', response)
-          return Observable.concat(
-            Observable.of({ type: actionsType.AUTHEN_SUCCESS, payload: response }),
-            Observable.of({ type: actionsType.RESET_TO_ROUTE, routeName: RouteKey.Drawer })
-          )
-        } else {
-          return Observable.concat(
-            Observable.of({ type: actionsType.RESET_TO_ROUTE, routeName: RouteKey.Login })
-          )
-        }
-      })
-  })
-
   const login$ = action$.ofType(actionsType.LOGIN).switchMap((action) => {
     console.log('log', action)
     return Observable.fromPromise(signIn(action.email, action.password))
@@ -67,7 +50,8 @@ export default (action$, store, dependencies) => {
 
   const logout$ = action$.ofType(actionsType.LOGOUT).switchMap((action) => {
     return Observable.fromPromise(signOut())
-      .mergeMap(() => {
+      .mergeMap((res) => {
+        console.log('log', res)
         return Observable.concat(
           Observable.of({ type: actionsType.PUSH, routeName: RouteKey.Login })
         )
@@ -75,7 +59,6 @@ export default (action$, store, dependencies) => {
   })
 
   return Observable.merge(
-    checkAuthen$,
     login$,
     logout$,
     register$

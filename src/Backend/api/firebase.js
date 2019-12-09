@@ -23,7 +23,7 @@ export const signIn = async (email, password) => {
 
 export const signOut = async () => {
   try {
-    const res = await auth().currentUser.signOut()
+    const res = await auth().signOut()
     console.log('signOut', res)
     return res
   } catch (e) {
@@ -33,8 +33,15 @@ export const signOut = async () => {
 
 export const onAuthStateChanged = async () => {
   try {
-    const user = await auth().onAuthStateChanged()
-    return user
+    await auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log('user', user)
+        // Signed in
+        return user
+      } else {
+        // Signed out
+      }
+    })
   } catch (e) {
     Alert.alert('Error!', e.message)
   }

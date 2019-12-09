@@ -13,6 +13,8 @@ export const HomeView = ({ navigation, clientState, gotoDetail }) => {
       title='HomeScreen'
     >
       <View style={styles.body}>
+        {
+          clientState.clients && clientState.clients.length > 0 &&
         <FlatList
           numColumns= {2}
           extraData= {clientState}
@@ -20,6 +22,8 @@ export const HomeView = ({ navigation, clientState, gotoDetail }) => {
           keyExtractor={(_, index) => index.toString()}
           renderItem={(object) => ClientCell({ object, gotoDetail })}
         />
+        }
+
       </View>
     </BaseView>
   )

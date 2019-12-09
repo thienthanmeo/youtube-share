@@ -8,7 +8,7 @@ import PlayScreen from 'frontend/Screens/Play'
 
 import React from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { createBottomTabNavigator, createDrawerNavigator, createStackNavigator } from 'react-navigation'
+import { createBottomTabNavigator, createDrawerNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import {
   createReactNavigationReduxMiddleware,
   reduxifyNavigator
@@ -26,6 +26,7 @@ import ShoeShop from 'frontend/Screens/Examples/ShoeShop'
 import FlatList from 'frontend/Screens/Examples/FlatList'
 import AnimatedProperty from 'frontend/Screens/Examples/AnimatedProperty'
 import Examples from 'frontend/Screens/Examples'
+import ShareScreen from 'frontend/Screens/Share'
 
 const middlewareNav = createReactNavigationReduxMiddleware(
   'root',
@@ -46,6 +47,7 @@ const HomeStack = createStackNavigator(
 const MainTabbar = createBottomTabNavigator(
   {
     Home: HomeStack,
+    Share: ShareScreen,
     Settings: Setting
   },
   {
@@ -58,6 +60,8 @@ const MainTabbar = createBottomTabNavigator(
           iconName = `ios-home`
         } else if (routeName === RouteKey.Settings) {
           iconName = `ios-settings`
+        } else {
+          iconName = `md-share`
         }
 
         return <Icon
@@ -119,7 +123,7 @@ const AnimaTranslationStack = createStackNavigator({
   headerMode: 'none'
 })
 
-const RootNavigator = createStackNavigator(
+const RootNavigator = createSwitchNavigator(
   {
     Authen: { screen: Authen },
     Login: {
