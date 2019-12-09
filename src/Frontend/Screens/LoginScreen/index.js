@@ -6,17 +6,22 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput
+  TextInput,
+  Switch
 } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import { connect } from 'react-redux'
-import { COLORS, ISIOS, height, width } from 'utils/globalStyles'
+import { COLORS, ISIOS, width } from 'utils/globalStyles'
 import { actionsType, RouteKey } from 'utils/globalConstants'
-import PropTypes from 'prop-types'
 
 class LoginScreen extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      registerMode: false,
+      email: '',
+      password: ''
+    }
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
   }
   componentDidMount () {
@@ -53,23 +58,67 @@ class LoginScreen extends Component {
       return true
     }
   };
-  render () {
-    const { login } = this.props
 
+  onChangeModeRegister = () => {
+    this.setState({ registerMode: !this.state.registerMode })
+  }
+
+  onPress= () => {
+    const { registerMode, email, password } = this.state
+    const { signIn, signUp } = this.props
+
+    if (registerMode) {
+      signUp(email, password)
+    } else {
+      signIn(email, password)
+    }
+  }
+
+  setEmail = (email) => {
+    this.setState({ email })
+  }
+
+  setPassword = (password) => {
+    this.setState({ password })
+  }
+
+  render () {
+    const { registerMode, email, password } = this.state
+    const titleMode = registerMode ? 'Sign In' : 'Sign Up'
+    const titleForm = registerMode ? 'Please input info signUp' : 'Please input info signIn'
+    const titleButton = registerMode ? 'Sign Up' : 'Sign In'
     return (
       <BaseView>
         <View style={styles.container}>
+          <View style={styles.containerBottom}/>
           <View style={styles.container}>
             <View style={styles.containerLoginForm}>
               <View style={styles.containerTitle}>
-                <Text style={styles.textTitle}>Please input info login</Text>
+                <View style={styles.containerSwitch}>
+                  <Text style={styles.textMode}>{titleMode}</Text>
+                  <Switch value={registerMode} onValueChange={this.onChangeModeRegister}/>
+                </View>
+                <Text style={styles.textTitle}>{titleForm}</Text>
               </View>
               <View style={styles.containerInputForm}>
-                <TextInput style={styles.input}/>
-                <TextInput style={styles.input}/>
+                <TextInput
+                  value={email}
+                  style={styles.input}
+                  autoCapitalize="none"
+                  placeholder={'Email ...'}
+                  keyboardType="email-address"
+                  onChangeText={this.setEmail}
+                />
+                <TextInput
+                  secureTextEntry
+                  value={password}
+                  style={styles.input}
+                  placeholder={'Password ...'}
+                  onChangeText={this.setPassword}
+                />
               </View>
-              <TouchableOpacity onPress={() => login()} style={styles.btnLogin}>
-                <Text style={styles.txtBtn}>Login</Text>
+              <TouchableOpacity onPress={this.onPress} style={styles.btnLogin}>
+                <Text style={styles.txtBtn}>{titleButton}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -84,7 +133,8 @@ const mapStateToProps = state => ({
   navigate: state.navigate
 })
 const mapactionsTypeToProps = dispatch => ({
-  login: () => dispatch({ type: actionsType.LOGIN }),
+  signIn: (email, password) => dispatch({ type: actionsType.LOGIN, email, password }),
+  signUp: (email, password) => dispatch({ type: actionsType.REGISTER, email, password }),
   close: () => dispatch({ type: 'pop' })
 })
 export default connect(
@@ -94,14 +144,9 @@ export default connect(
 
 LoginScreen.defaultProps = {
   login: () => {},
+  signUp: () => {},
   navigate: {},
   close: () => {}
-}
-
-LoginScreen.propTypes = {
-  login: PropTypes.func,
-  navigate: PropTypes.any,
-  close: PropTypes.func
 }
 
 const styles = StyleSheet.create({
@@ -111,14 +156,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#f2f2f2'
   },
-  containerBottom: { flex: 0.5, backgroundColor: '#f2f2f2' },
+  containerBottom: {
+    flex: 0.3,
+    backgroundColor: '#f2f2f2'
+  },
   containerLoginForm: {
     borderWidth: 1,
     borderRadius: 8,
     paddingBottom: 16,
-    height: height(50),
     alignItems: 'center',
     borderColor: '#c3c3c3'
+  },
+  containerSwitch: {
+    flex: 1,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   containerTitle: {
     flex: 1,
@@ -137,17 +191,19 @@ const styles = StyleSheet.create({
   },
   btnLogin: {
     height: 45,
-    paddingHorizontal: 32,
-    backgroundColor: COLORS.BACKGROUND_COLOR,
     borderRadius: 5,
+    marginVertical: 16,
+    paddingHorizontal: 32,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: COLORS.BACKGROUND_COLOR
   },
   txtBtn: {
     color: COLORS.TEXT
   },
   textTitle: {
+    flex: 1,
     fontSize: 27,
     color: COLORS.TEXT,
     fontWeight: 'bold'
@@ -160,5 +216,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     marginHorizontal: width(2)
+  },
+  textMode: {
+    right: 16,
+    color: COLORS.TEXT
   }
 })

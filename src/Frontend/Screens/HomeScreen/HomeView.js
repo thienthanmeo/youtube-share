@@ -12,10 +12,8 @@ export const HomeView = ({ navigation, clientState, gotoDetail }) => {
       isHeader={true}
       title='HomeScreen'
     >
-
       <View style={styles.body}>
         <FlatList
-          // inverted={true}
           numColumns= {2}
           extraData= {clientState}
           data={clientState.clients}

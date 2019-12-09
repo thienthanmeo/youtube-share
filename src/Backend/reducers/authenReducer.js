@@ -1,6 +1,5 @@
 import { actionsType, initState, KeyStore } from 'utils/globalConstants'
-import AsyncStorage from '@react-native-community/async-storage';
-
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default (state = initState.authenStateInit, action) => {
   switch (action.type) {
